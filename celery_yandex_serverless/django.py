@@ -1,3 +1,6 @@
+import base64
+import importlib
+import json
 import logging
 import os
 
@@ -25,6 +28,58 @@ def worker_view_factory(celery_app):
 
         if _secret_key != key:
             return JsonResponse({"status": "error", "message": "not found"}, status=404)
+
+        try:
+            data = json.loads(request.body)
+            messages = data['messages']
+        except KeyError:
+            logger.error("incorrect data structure")
+            logger.debug(request.body)
+            return JsonResponse({"status": "error", "message": "incorrect data structure"}, status=500)
+
+        for message in messages:
+            # enable force saving task results
+            celery_app.conf.task_store_eager_result = True
+            store_result_original_value = celery_app.conf.task_store_eager_result
+
+            try:
+                # decode message
+                data_json = base64.b64decode(message['details']['message']['body']).decode()
+                data = celery_app.backend.decode(data_json)
+
+                # search for target function
+                module_path = data['headers']['task'].split('.')
+                package_path = ".".join(module_path[:-1])
+                function_name = module_path[-1]
+                module = importlib.import_module(package_path)
+                function = getattr(module, function_name)
+
+                # get task arguments
+                args, kwargs, options = json.loads(base64.b64decode(data['body']))
+            except KeyError:
+                logger.error("incorrect data structure")
+                logger.debug(request.body)
+                return JsonResponse({"status": "error", "message": "incorrect data structure"}, status=500)
+
+            try:
+                # start celery task
+                result = function.apply(
+                    args=args,
+                    kwargs=kwargs,
+                    task_id=data['headers']['id'],
+                    headers=data['headers']['headers'],
+                    **options
+                )
+
+                # возвращаем ответ в зависимости от успешности обработки задачи
+                if not result.successful():
+                    logging.error(result.info)
+                    return JsonResponse({"status": "task_error", "info": str(result.info)})
+            except Exception:
+                raise
+            finally:
+                # return settings to default state
+                celery_app.conf.task_store_eager_result = store_result_original_value
 
         return JsonResponse({"status": "ok"})
     return _worker_view

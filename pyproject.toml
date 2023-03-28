@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "celery-yandex-serverless"
-version = "0.1.0.7"
+version = "0.0.1"
 description = ""
 authors = ["atnartur <i@atnartur.ru>"]
 readme = "README.md"
