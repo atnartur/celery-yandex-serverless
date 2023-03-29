@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 _secret_key_slug = "CELERY_YANDEX_SERVERLESS_KEY"
 _secret_key = getattr(settings, _secret_key_slug, os.environ.get(_secret_key_slug))
 if _secret_key is None:
-    logging.error("Define CELERY_YANDEX_SERVERLESS_KEY settings with secret key for serverless worker")
+    logger.error("Define CELERY_YANDEX_SERVERLESS_KEY settings with secret key for serverless worker")
 
 
 def worker_view_factory(celery_app):
@@ -61,6 +61,8 @@ def worker_view_factory(celery_app):
                 logger.debug(request.body)
                 return JsonResponse({"status": "error", "message": "incorrect data structure"}, status=500)
 
+            logger.info("task %s received", function_name)
+
             try:
                 # start celery task
                 result = function.apply(
@@ -70,6 +72,7 @@ def worker_view_factory(celery_app):
                     headers=data['headers']['headers'],
                     **options
                 )
+                logger.info("task %s processed", function_name)
 
                 # возвращаем ответ в зависимости от успешности обработки задачи
                 if not result.successful():
