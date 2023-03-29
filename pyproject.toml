@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "celery-yandex-serverless"
-version = "0.0.1"
+version = "0.0.2"
 description = ""
 authors = ["atnartur <i@atnartur.ru>"]
 readme = "README.md"
@@ -9,7 +9,9 @@ packages = [{include = "celery_yandex_serverless"}]
 [tool.poetry.dependencies]
 python = "^3.8"
 django = "^4"
-celery = "^5"
+boto3 = "^1.26.101"
+pycurl = "^7.45.2"
+celery = "^5.2.7"
 
 [build-system]
 requires = ["poetry-core"]
