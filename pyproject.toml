@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "celery-yandex-serverless"
-version = "0.0.2"
+version = "0.1.0"
 description = "Package for starting Celery worker inside Yandex Cloud Serverless Container"
-authors = ["atnartur <i@atnartur.ru>"]
+authors = ["atnartur <i@atnartur.dev>"]
 readme = "README.md"
 packages = [{include = "celery_yandex_serverless"}]
 
