@@ -103,6 +103,25 @@ yc serverless trigger create message-queue \
   --batch-cutoff 10s 
 ```
 
+### Включение логирования
+
+Добавьте в `settings.py`:
+```python
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "loggers": {
+        "celery_yandex_serverless.django": {
+            "level": "INFO",
+        },
+    },
+}
+```
+
+Уровни:
+- `INFO` - инфорация о начале и окончании обработки задачи
+- `DEBUG` - печать содержимого аргументов celery-таска
+
 ## Статьи в Яндекс.Облаке
 - [Подключение Celery](https://cloud.yandex.ru/docs/message-queue/instruments/celery)
 - [Документация по созданию триггеров через yc](https://cloud.yandex.ru/docs/cli/cli-ref/managed-services/serverless/trigger/create/message-queue).
