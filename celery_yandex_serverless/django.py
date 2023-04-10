@@ -69,12 +69,10 @@ def worker_view_factory(celery_app):
                     args=args,
                     kwargs=kwargs,
                     task_id=data['headers']['id'],
-                    headers=data['headers']['headers'],
                     **options
                 )
                 logger.info("task %s processed", function_name)
 
-                # возвращаем ответ в зависимости от успешности обработки задачи
                 if not result.successful():
                     logging.error(result.info)
                     return JsonResponse({"status": "task_error", "info": str(result.info)})
