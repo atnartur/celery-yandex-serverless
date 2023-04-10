@@ -127,6 +127,14 @@ LOGGING = {
 - [Документация по созданию триггеров через yc](https://cloud.yandex.ru/docs/cli/cli-ref/managed-services/serverless/trigger/create/message-queue).
 - [Подробнее про работу триггера](https://cloud.yandex.ru/docs/serverless-containers/concepts/trigger/ymq-trigger).
 
+## Обновление
+
+1. `poetry version ...` - обновить версию
+2. закомитить изменения
+3. `git tag ...` - добавить тег с версией пакета
+4. `git push --tags` - запушить тег
+5. `poetry publish --build` - опубликовать пакет
+
 ## Автор
 [Атнагулов Артур](https://atnartur.dev)
 
