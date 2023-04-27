@@ -86,7 +86,7 @@ urlpatterns = [
 ### Создание триггера в Яндекс.Облаке
 
 В консольной команде ниже сделайте замены и выполните ее:
-- `YANDEX_MESSAGE_QUEUE_ARN` - ARN очереди
+- `YANDEX_MESSAGE_QUEUE_ARN` - ARN очереди (можно увидеть на странице очереди)
 - `SERVICE_ACCOUNT_NAME` - название сервисного аккаунта
 - `SERVERLESS_CONTAINER_NAME` - название serverless-контейнера
 - `CELERY_YANDEX_SERVERLESS_KEY` - ключ, созданный ранее
