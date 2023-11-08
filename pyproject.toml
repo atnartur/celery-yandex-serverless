@@ -8,10 +8,10 @@ packages = [{include = "celery_yandex_serverless"}]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-django = "^3"
-boto3 = "^1.26.101"
+django = "^4.0.0"
+boto3 = "^1.28.80"
 pycurl = "^7.45.2"
-celery = "^5.0"
+celery = "^5.3.4"
 
 [build-system]
 requires = ["poetry-core"]
