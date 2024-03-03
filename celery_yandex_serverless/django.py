@@ -19,7 +19,7 @@ if _secret_key is None and not settings.DEBUG:
 def worker_view_factory(celery_app):
     @csrf_exempt
     def _worker_view(request, key: str):
-        if _secret_key is None and not settings.DEBUG:
+        if _secret_key is None:
             logging.error("Define CELERY_YANDEX_SERVERLESS_KEY settings with secret key for serverless worker")
             return JsonResponse({"status": "error", "message": "secret key is not set"}, status=500)
 
