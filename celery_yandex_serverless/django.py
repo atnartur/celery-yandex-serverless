@@ -12,14 +12,14 @@ logger = logging.getLogger(__name__)
 
 _secret_key_slug = "CELERY_YANDEX_SERVERLESS_KEY"
 _secret_key = getattr(settings, _secret_key_slug, os.environ.get(_secret_key_slug))
-if _secret_key is None:
+if _secret_key is None and not settings.DEBUG:
     logger.error("Define CELERY_YANDEX_SERVERLESS_KEY settings with secret key for serverless worker")
 
 
 def worker_view_factory(celery_app):
     @csrf_exempt
     def _worker_view(request, key: str):
-        if _secret_key is None:
+        if _secret_key is None and not settings.DEBUG:
             logging.error("Define CELERY_YANDEX_SERVERLESS_KEY settings with secret key for serverless worker")
             return JsonResponse({"status": "error", "message": "secret key is not set"}, status=500)
 
